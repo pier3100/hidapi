@@ -1531,7 +1531,14 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
         if (devdesc->_element_callback != NULL){
             // TODO may need to use HidP_GetUsageValueArray, if element->report_index > 1
             unsigned long new_value;
-            res = HidP_GetUsageValue(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &new_value, pp_data, buf, report_length);
+            if (cur_element->report_index > 1) {
+                char buffer[128];
+                res = HidP_GetUsageValueArray(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &buffer, pp_data, buf, report_length);// TODO this is not yet correct, also the next section which considers the status, only makes sense for the base case, furtjermore we need to think about how to output this character array as c++ is strongly typed
+            } {
+                res = HidP_GetUsageValue(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &new_value, pp_data, buf, report_length);
+            }
+            
+            
             if (res == HIDP_STATUS_SUCCESS){
                 if (new_value != cur_element->rawvalue || cur_element->repeat){
 #ifdef DEBUG_PARSER
