@@ -1534,12 +1534,15 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
             if (cur_element->report_index > 1) {
                 char buffer[128];
                 res = HidP_GetUsageValueArray(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &buffer[0], cur_element->report_index, pp_data, buf, report_length);// TODO this is not yet correct, also the next section which considers the status, only makes sense for the base case, furtjermore we need to think about how to output this character array as c++ is strongly typed
-                int loopCounter;
-                int number;
+                unsigned long loopCounter;
+                unsigned long number;
+                double factor;
                 new_value = 0;
                 for (loopCounter = 0; loopCounter < cur_element->report_index; ++loopCounter) {
                     number = buffer[loopCounter] - 48; //ansci to integer conversion
-                    new_value = new_value + (pow(10, ((cur_element->report_index - 1) - loopCounter)) * number); 
+                    factor = (double) pow(10, (((double) cur_element->report_index - 1) - loopCounter));
+                    new_value = (unsigned long) new_value + (factor * number); 
+                    new_value = 10;
                 }
                 
             } {
