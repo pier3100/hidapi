@@ -1542,12 +1542,10 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
                     number = buffer[loopCounter] - 48; //ansci to integer conversion
                     factor = (double) pow(10, (((double) cur_element->report_index - 1) - loopCounter));
                     new_value = (unsigned long) new_value + (factor * number); 
-                    new_value = 10;
                 }
                 
             } else {
                 res = HidP_GetUsageValue(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &new_value, pp_data, buf, report_length);
-                new_value = 20;
             }
             
             
