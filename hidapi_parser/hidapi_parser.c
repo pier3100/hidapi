@@ -1547,7 +1547,7 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
                 
             } {
                 res = HidP_GetUsageValue(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &new_value, pp_data, buf, report_length);
-                new_value = 20;
+                new_value = cur_element->report_index;
             }
             
             
