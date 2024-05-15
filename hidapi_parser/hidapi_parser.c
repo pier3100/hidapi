@@ -1551,9 +1551,7 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
             }
             
             // for TESTING pusposes
-#ifdef DEBUG_PARSER
-            printf("NTstatus %x\n, report_index%i, , report_size %i, element page %i, usage %i, index %i, value %i, rawvalue %i, newvalue %i\n", res, cur_element->report_index, cur_element->report_size, cur_element->usage_page, cur_element->usage, cur_element->index, cur_element->value, cur_element->rawvalue, new_value);
-#endif
+            new_value = cur_element->report_size;
             hid_element_set_value_from_input(cur_element, new_value);
 
             
