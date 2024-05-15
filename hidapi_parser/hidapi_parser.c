@@ -1533,7 +1533,6 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
             unsigned long new_value;
             if (cur_element->report_index > 1) {
                 //TEST
-                /**
                 int number_characters;
                 number_characters = cur_element->report_index;
                 number_characters = 1;
@@ -1548,10 +1547,7 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
                     factor = (double) pow(10, (((double) number_characters - 1) - loopCounter));
                     new_value = (unsigned long) new_value + (factor * number); 
                 }
-                **/
-                res = HidP_GetUsageValue(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &new_value, pp_data, buf, report_length);
-                new_value = new_value - 48;
-                new_value = 1000 + new_value;
+                new_value = 1000 + cur_element->report_index;
             } else {
                 res = HidP_GetUsageValue(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &new_value, pp_data, buf, report_length);
             }
