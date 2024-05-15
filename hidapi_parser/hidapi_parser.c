@@ -1533,13 +1533,12 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
             unsigned long new_value;
             if (cur_element->report_index > 1) {
                 //TEST
-                //cur_element->report_index = 2; //for first test
+                /**
                 int number_characters;
                 number_characters = cur_element->report_index;
                 number_characters = 1;
                 char buffer[13];
                 res = HidP_GetUsageValueArray(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &buffer[0], 13, pp_data, buf, report_length);// TODO this is not yet correct, also the next section which considers the status, only makes sense for the base case, furtjermore we need to think about how to output this character array as c++ is strongly typed
-                res = HidP_GetUsageValue(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &new_value, pp_data, buf, report_length);
                 unsigned long loopCounter;
                 unsigned long number;
                 double factor;
@@ -1549,18 +1548,17 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
                     factor = (double) pow(10, (((double) number_characters - 1) - loopCounter));
                     new_value = (unsigned long) new_value + (factor * number); 
                 }
+                **/
+                res = HidP_GetUsageValue(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &new_value, pp_data, buf, report_length);
+                new_value = new_value - 48;
                 new_value = 1000 + new_value;
             } else {
                 res = HidP_GetUsageValue(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &new_value, pp_data, buf, report_length);
             }
             
-            // for TESTING pusposes
-            //new_value = cur_element->report_index;
-            //hid_element_set_value_from_input(cur_element, new_value);
-
             hid_element_set_value_from_input(cur_element, new_value);
             devdesc->_element_callback(cur_element, devdesc->_element_data);
-
+            /**
             if (res == HIDP_STATUS_SUCCESS){
                 if ((new_value != cur_element->rawvalue || cur_element->repeat) || cur_element->report_index > 1){
 #ifdef DEBUG_PARSER
@@ -1587,6 +1585,7 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
                     devdesc->_element_callback(cur_element, devdesc->_element_data);
                 }
             }
+            **/
         }
         cur_element = hid_get_next_input_element(cur_element);
     }
