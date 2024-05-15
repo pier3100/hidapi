@@ -1553,11 +1553,12 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
             }
             
             if (res == HIDP_STATUS_SUCCESS){
-                if ((new_value != cur_element->rawvalue || cur_element->repeat) || cur_element->report_index > 1){
+                if (new_value != cur_element->rawvalue || cur_element->repeat || cur_element->report_index > 1){
 #ifdef DEBUG_PARSER
                     printf("element page %i, usage %i, index %i, value %i, rawvalue %i, newvalue %i\n", cur_element->usage_page, cur_element->usage, cur_element->index, cur_element->value, cur_element->rawvalue, new_value);
 #endif
-                    
+                hid_element_set_value_from_input(cur_element, new_value);
+                devdesc->_element_callback(cur_element, devdesc->_element_data);
                 }
             }
             else if (res == HIDP_STATUS_USAGE_NOT_FOUND){
