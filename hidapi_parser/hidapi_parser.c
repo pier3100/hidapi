@@ -1535,7 +1535,7 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
                 //TEST
                 int number_characters;
                 number_characters = cur_element->report_index;
-                number_characters = 2;
+                number_characters = 4;
                 char buffer[56];
                 res = HidP_GetUsageValueArray(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &buffer[0], 56, pp_data, buf, report_length);// TODO this is not yet correct, also the next section which considers the status, only makes sense for the base case, furtjermore we need to think about how to output this character array as c++ is strongly typed
                 unsigned long loopCounter;
