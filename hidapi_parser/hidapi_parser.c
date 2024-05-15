@@ -1534,15 +1534,18 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
             if (cur_element->report_index > 1) {
                 //TEST
                 //cur_element->report_index = 2; //for first test
+                int number_characters;
+                number_characters = cur_element->report_index;
+                number_characters = 2;
                 char buffer[128];
-                res = HidP_GetUsageValueArray(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &buffer[0], cur_element->report_index, pp_data, buf, report_length);// TODO this is not yet correct, also the next section which considers the status, only makes sense for the base case, furtjermore we need to think about how to output this character array as c++ is strongly typed
+                res = HidP_GetUsageValueArray(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &buffer[0], number_characters, pp_data, buf, report_length);// TODO this is not yet correct, also the next section which considers the status, only makes sense for the base case, furtjermore we need to think about how to output this character array as c++ is strongly typed
                 unsigned long loopCounter;
                 unsigned long number;
                 double factor;
                 new_value = 0;
-                for (loopCounter = 0; loopCounter < cur_element->report_index; ++loopCounter) {
+                for (loopCounter = 0; loopCounter < number_characters; ++loopCounter) {
                     number = buffer[loopCounter] - 48; //ansci to integer conversion
-                    factor = (double) pow(10, (((double) cur_element->report_index - 1) - loopCounter));
+                    factor = (double) pow(10, (((double) number_characters - 1) - loopCounter));
                     new_value = (unsigned long) new_value + (factor * number); 
                 }
                 
@@ -1551,12 +1554,12 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
             }
             
             // for TESTING pusposes
-            new_value = cur_element->report_index;
-            hid_element_set_value_from_input(cur_element, new_value);
+            //new_value = cur_element->report_index;
+            //hid_element_set_value_from_input(cur_element, new_value);
 
             
             if (res == HIDP_STATUS_SUCCESS){
-                if ((new_value != cur_element->rawvalue || cur_element->repeat) || cur_element->report_size > 1){
+                if ((new_value != cur_element->rawvalue || cur_element->repeat) || cur_element->report_index > 1){
 #ifdef DEBUG_PARSER
                     printf("element page %i, usage %i, index %i, value %i, rawvalue %i, newvalue %i\n", cur_element->usage_page, cur_element->usage, cur_element->index, cur_element->value, cur_element->rawvalue, new_value);
 #endif
