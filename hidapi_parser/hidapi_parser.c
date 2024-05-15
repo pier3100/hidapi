@@ -1550,6 +1550,12 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
                 res = HidP_GetUsageValue(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &new_value, pp_data, buf, report_length);
             }
             
+            // for TESTING pusposes
+#ifdef DEBUG_PARSER
+            printf("element page %i, usage %i, index %i, value %i, rawvalue %i, newvalue %i\n", cur_element->usage_page, cur_element->usage, cur_element->index, cur_element->value, cur_element->rawvalue, new_value);
+#endif
+            hid_element_set_value_from_input(cur_element, new_value);
+
             
             if (res == HIDP_STATUS_SUCCESS){
                 if ((new_value != cur_element->rawvalue || cur_element->repeat) || cur_element->report_size > 1){
