@@ -1534,16 +1534,19 @@ int hid_parse_input_elements_values( unsigned char* buf, int size, struct hid_de
             if (cur_element->report_index > 1) {
                 //TEST
                 int number_characters;
+                int character_offset;
                 number_characters = cur_element->report_index;
                 number_characters = 9; //maximum number of characters we can fit in 32bit
+                character_offset = 2;
                 char buffer[56];
                 res = HidP_GetUsageValueArray(HidP_Input, cur_element->usage_page, 0, cur_element->usage, &buffer[0], 56, pp_data, buf, report_length);// TODO this is not yet correct, also the next section which considers the status, only makes sense for the base case, furtjermore we need to think about how to output this character array as c++ is strongly typed
                 unsigned long loopCounter;
                 unsigned long number;
                 double factor;
-                new_value = (unsigned long) pow(10, (double) number_characters );
+                new_value = (unsigned long) pow(10, (double) number_characters ) * (buffer[0] - 48); // we assume the first character is either 1,2,3,4; this still fits within 32bit, 
+                // we assume the second character is 0, now we append characters 3 op to 12
                 for (loopCounter = 0; loopCounter < number_characters; ++loopCounter) {
-                    number = buffer[loopCounter] - 48; //ansci to integer conversion
+                    number = buffer[loopCounter + character_offset] - 48; //ansci to integer conversion
                     factor = (double) pow(10, (((double) number_characters - 1) - loopCounter));
                     new_value = (unsigned long) new_value + (factor * number); 
                 }
